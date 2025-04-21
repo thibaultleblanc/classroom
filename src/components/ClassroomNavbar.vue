@@ -1,7 +1,14 @@
 <template>
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container">
-      <a class="navbar-brand" href="#">Classroom</a>
+      <a class="navbar-brand" href="/">
+        <!-- Superposition des icônes -->
+        <span class="fa-stack fa-lg">
+          <font-awesome-icon icon="square" class="fa-stack-2x text-warning" />
+          <font-awesome-icon icon="school" class="fa-stack-1x text-dark" />
+        </span>
+        Classroom
+      </a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
         aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -23,4 +30,10 @@
 
 <style scoped>
 /* Ajoutez des styles personnalisés ici si nécessaire */
+.fa-stack {
+  font-size: 0.75em; /* Ajustez la taille globale de l'icône */
+  vertical-align: middle; /* Aligne verticalement l'icône avec le texte */
+  position: relative;
+  top: -2px; /* Ajustez cette valeur pour surélever l'icône */
+}
 </style>
