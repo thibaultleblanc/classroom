@@ -76,6 +76,7 @@ export const useClassroomStore = defineStore("classroom", () => {
       throw new Error("Le nombre d'élèves dépasse le nombre de places disponibles.");
     }
     students.splice(0, students.length, ...newStudents); // Remplace la liste des élèves
+    state.value = "studentsImported";
   };
 
   return {

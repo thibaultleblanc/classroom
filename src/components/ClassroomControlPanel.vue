@@ -6,19 +6,37 @@
           Importez une liste d'élèves au format CSV pour les ajouter à la salle de classe. Vous pourrez ensuite exporter l'image.
         </p>
       </div>
-    </div>
-
-    <div class="row g-2">
-
-      <!-- Bouton pour importer un CSV -->
-      <div class="col-12 col-md-6">
+      <div class="col-12">
         <button class="btn btn-success w-100" @click="triggerFileInput">
           Importer une liste d'élèves
         </button>
+        <input type="file" ref="studentList" accept=".csv" class="d-none" @change="handleFileUpload" />
+      </div>
+    </div>
+
+    <!-- Ligne 2 : Menu déroulant et bouton "Placer les élèves" -->
+    <div class="row mb-4">
+      <div class="col-12">
+        <label for="distributionMode" class="form-label">Mode de distribution :</label>
+        <select id="distributionMode" class="form-select" v-model="selectedDistribution">
+          <option value="random">Aléatoire</option>
+          <option value="alphabetical">Ordre alphabétique</option>
+        </select>
       </div>
 
-      <!-- Bouton pour exporter l'image -->
-      <div class="col-12 col-md-6">
+      <div class="col-12 mt-2">
+        <p class="text-muted">{{ distributionDescription }}</p>
+      </div>
+      <div class="col-12">
+        <button class="btn btn-info w-100" :disabled="disablePlaceStudents" @click="placeStudents">
+          Placer les élèves
+        </button>
+      </div>
+    </div>
+
+    <!-- Ligne 3 : Exporter l'image -->
+    <div class="row">
+      <div class="col-12">
         <button class="btn btn-secondary w-100" :disabled="disableExportImage" @click="exportImage">
           Exporter l'image
         </button>
@@ -34,11 +52,33 @@
 import { ref, computed } from 'vue';
 import { useClassroomStore } from '../stores/useClassroomStore';
 
-// Déclarer les événements
+// Utiliser le store
 const classroomStore = useClassroomStore();
 
 // Références
 const studentList = ref<HTMLInputElement | null>(null);
+
+// État local pour le mode de distribution
+const selectedDistribution = ref('random');
+
+// Description du mode de distribution
+const distributionDescription = computed(() => {
+  if (selectedDistribution.value === 'random') {
+    return 'Les élèves seront placés de manière aléatoire dans la salle.';
+  } else if (selectedDistribution.value === 'alphabetical') {
+    return 'Les élèves seront placés dans l\'ordre alphabétique.';
+  }
+  return '';
+});
+
+// Propriétés calculées pour gérer l'état des boutons
+const disablePlaceStudents = computed(() => {
+  return classroomStore.students.length === 0 || classroomStore.markers_canvas.length === 0;
+});
+
+const disableExportImage = computed(() => {
+  return classroomStore.state !== 'end'; // Actif uniquement si l'état global est "end"
+});
 
 // Fonction pour déclencher l'input file
 const triggerFileInput = () => {
@@ -76,12 +116,8 @@ const handleFileUpload = (event: Event) => {
   }
 };
 
-// Propriétés calculées pour gérer l'état des boutons
-const disableExportImage = computed(() => {
-  return !classroomStore.image || classroomStore.markers_canvas.length === 0;
-});
 
-// Fonction pour exporter l'image avec les marqueurs
+// Fonction pour exporter l'image
 const exportImage = () => {
   if (!classroomStore.image) {
     console.error("Aucune image à exporter.");
