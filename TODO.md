@@ -1,7 +1,8 @@
 # TODO
 
+
+- L'ajout des marqueurs est possible uniquement si le marqueur est sur l'image
 - Maj le readme
-- Proposer l'import des positions
 - Faire le parcours utilisateur
 - Enchainer sur le placement des noms
 
