@@ -4,8 +4,8 @@
       <a class="navbar-brand" href="/">
         <!-- Superposition des icônes -->
         <span class="fa-stack fa-lg">
-          <font-awesome-icon icon="square" class="fa-stack-2x text-warning" />
-          <font-awesome-icon icon="school" class="fa-stack-1x text-dark" />
+          <font-awesome-icon :icon="['fas', 'square']" class="fa-stack-2x text-warning" />
+          <font-awesome-icon :icon="['fas', 'school']" class="fa-stack-1x text-dark" />
         </span>
         Classroom
       </a>

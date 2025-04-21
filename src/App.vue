@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import ClassroomNavbar from './components/ClassroomNavbar.vue'
+import ClassroomFooter from './components/ClassroomFooter.vue'
 </script>
 
 <template>
@@ -17,10 +18,8 @@ import ClassroomNavbar from './components/ClassroomNavbar.vue'
     </main>
 
     <!-- Footer -->
-    <footer class="bg-dark text-white py-3 mt-auto">
-      <div class="container text-center">
-        <p>&copy; 2025 Classroom. Tous droits réservés.</p>
-      </div>
+    <footer>
+      <ClassroomFooter />
     </footer>
   </div>
 </template>
