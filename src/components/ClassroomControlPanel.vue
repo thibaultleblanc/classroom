@@ -1,57 +1,35 @@
 <template>
-  <div class="control-panel d-flex flex-column justify-content-center align-items-start">
-    <button class="btn btn-primary mb-2" :disabled="disableToggleMarkingMode" @click="toggleMarkingMode">
-      {{ markingMode ? 'Désactiver' : 'Activer' }} le mode marquer
-    </button>
-    <button class="btn btn-secondary mb-2" :disabled="disableExportImage" @click="exportImage">
-      Exporter l'image
-    </button>
-    <button class="btn btn-success mb-2" :disabled="disableImportCsv" @click="triggerFileInput">
-      Importer un CSV
-    </button>
-    <input type="file" ref="fileInput" accept=".csv" class="d-none" @change="handleFileUpload" />
+  <div class="container">
+    <div class="row mb-4">
+      <div class="col">
+        <p>
+          Importez une liste d'élèves au format CSV pour les ajouter à la salle de classe. Vous pourrez ensuite exporter l'image.
+        </p>
+      </div>
+    </div>
+
+    <div class="row g-2">
+      <!-- Bouton pour exporter l'image -->
+      <div class="col-12 col-md-6">
+        <button class="btn btn-secondary w-100" :disabled="disableExportImage" @click="exportImage">
+          Exporter l'image
+        </button>
+      </div>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { defineProps, defineEmits, ref, computed } from 'vue';
+import { computed } from 'vue';
 import { useClassroomStore } from '../stores/useClassroomStore';
 
-// Déclarer les props
-defineProps({
-  markingMode: {
-    type: Boolean,
-    required: true,
-  },
-  disableMarkingMode: {
-    type: Boolean,
-    required: true,
-  },
-});
-
 // Déclarer les événements
-const emit = defineEmits(['toggle-marking-mode']);
 const classroomStore = useClassroomStore();
 
-// Références
-const fileInput = ref<HTMLInputElement | null>(null);
-
+// Propriétés calculées pour gérer l'état des boutons
 const disableExportImage = computed(() => {
-  return !classroomStore.image || classroomStore.markers_canvas.length == 0;
+  return !classroomStore.image || classroomStore.markers_canvas.length === 0;
 });
-
-const disableImportCsv = computed(() => {
-  return !classroomStore.image; // Actif uniquement si une image est chargée
-});
-
-const disableToggleMarkingMode = computed(() => {
-  return !classroomStore.image;
-});
-
-// Méthode pour émettre l'événement de basculement du mode marquer
-const toggleMarkingMode = () => {
-  emit('toggle-marking-mode');
-};
 
 // Fonction pour exporter l'image avec les marqueurs
 const exportImage = () => {
@@ -93,36 +71,6 @@ const exportImage = () => {
     link.href = canvas.toDataURL('image/png');
     link.click();
   };
-};
-
-// Fonction pour déclencher l'input file
-const triggerFileInput = () => {
-  fileInput.value?.click();
-};
-
-// Fonction pour gérer l'importation du fichier CSV
-const handleFileUpload = (event: Event) => {
-  const target = event.target as HTMLInputElement;
-  const file = target.files?.[0];
-  if (file) {
-    const newMarkers: { x: number; y: number }[] = []; // Créer un nouveau tableau pour les marqueurs
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      const csvData = e.target?.result as string;
-      const rows = csvData.split('\n').filter((row) => row.trim() !== ''); // Ignorer les lignes vides
-      rows.forEach((row) => {
-        const [x, y] = row.split(',').map((value) => parseFloat(value.trim()));
-        if (!isNaN(x) && !isNaN(y)) {
-          newMarkers.push({
-            x: Math.ceil(classroomStore.xOffset + x / classroomStore.imageRatio),
-            y: Math.ceil(classroomStore.yOffset + y / classroomStore.imageRatio),
-          });
-        }
-      });
-      classroomStore.markers_canvas.splice(0, classroomStore.markers_canvas.length, ...newMarkers);
-    };
-    reader.readAsText(file);
-  }
 };
 </script>
 

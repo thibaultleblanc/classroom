@@ -37,3 +37,18 @@ npm run build
 ```sh
 npm run lint
 ```
+
+### State machine
+
+```
+state
+    start
+    imageImported
+    positionsValidated
+
+
+transition
+    start -> imageImported : addImage()
+    imageImported -> start : removeImage()
+    imageImported -> positionsValidated : validate po
+```

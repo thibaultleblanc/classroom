@@ -1,11 +1,15 @@
 # TODO
 
+- BUG : L'ajout des marqueurs doit être possible uniquement si le marqueur est sur l'image
+- BUG : quand on insère 2 fois le même fichier ca coince
 
-- L'ajout des marqueurs est possible uniquement si le marqueur est sur l'image
+- Permettre de télécharger le CSV des positions (ou ouvrir une modale sur le passage à la suite)
+- Faire l'ajout du CSV des élèves
+- Enchaîner sur le placement des noms
+- Faire la prévisualisation des noms
+- Vérifier que l'export fonctionne
+
+- Deployer sur github pages
 - Maj le readme
-- Faire le parcours utilisateur
-- Enchainer sur le placement des noms
-
-
 
 - Voir si la couleur du logo n'est pas de trop ?

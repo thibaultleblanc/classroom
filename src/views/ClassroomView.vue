@@ -1,37 +1,29 @@
 <template>
   <div class="main-content py-4">
     <div class="container">
-      <!-- Première ligne : Paragraphe -->
-      <div class="row mb-4">
-        <div class="col">
-          <p>
-            Ceci est la section principale de votre application. Vous pouvez y ajouter du contenu,
-            des composants ou tout ce que vous souhaitez afficher entre le header et le footer.
-          </p>
-        </div>
-      </div>
-
-      <!-- Seconde ligne : Image et panneau de contrôle -->
       <div class="row">
-        <!-- Colonne gauche : Image -->
         <div class="col-md-8 d-flex justify-content-center align-items-center">
-          <ClassroomImage :markingMode="markingMode" />
+          <ClassroomImage />
         </div>
-
-        <!-- Colonne droite : Panneau de contrôle -->
         <div class="col-md-4">
-          <ClassroomControlPanel
-            :markingMode="markingMode"
-            :disableMarkingMode="!classroomStore.image"
-            @toggle-marking-mode="toggleMarkingMode"
-          />
+
+          <template v-if="beforePositionValidated">
+            <PositionsControlPanel />
+          </template>
+          <template v-if="afterPositionValidated">
+            <ClassroomControlPanel />
+          </template>
         </div>
       </div>
 
-      <!-- Affichage des données déplacé dans ClassroomContent -->
       <div class="row mt-4">
         <div class="col">
-          <ClassroomContent />
+          <template v-if="beforePositionValidated">
+            <PositionsContent />
+          </template>
+          <template v-if="afterPositionValidated">
+            <ClassroomContent />
+          </template>
         </div>
       </div>
     </div>
@@ -40,19 +32,26 @@
 
 <script setup lang="ts">
 import ClassroomImage from '../components/ClassroomImage.vue';
+
+import PositionsContent from '../components/PositionsContent.vue';
+import PositionsControlPanel from '../components/PositionsControlPanel.vue';
+
 import ClassroomControlPanel from '../components/ClassroomControlPanel.vue';
 import ClassroomContent from '../components/ClassroomContent.vue';
+
+import { computed } from 'vue';
 import { useClassroomStore } from '../stores/useClassroomStore';
-import { ref } from 'vue';
 
 // Utiliser le store Pinia
 const classroomStore = useClassroomStore();
-const markingMode = ref(false);
 
-// Fonction pour basculer le mode marquage
-const toggleMarkingMode = () => {
-  markingMode.value = !markingMode.value;
-};
+const beforePositionValidated = computed(() => {
+  return classroomStore.state === 'start' || classroomStore.state === 'imageLoaded';
+});
+
+const afterPositionValidated = computed(() => {
+  return classroomStore.state === 'positionsValidated';
+});
 </script>
 
 <style scoped>

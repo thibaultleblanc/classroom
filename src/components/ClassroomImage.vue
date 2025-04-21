@@ -32,14 +32,6 @@
 import { ref, nextTick } from 'vue';
 import { useClassroomStore } from '../stores/useClassroomStore';
 
-// Déclarer les props
-const props = defineProps({
-  markingMode: {
-    type: Boolean,
-    required: true,
-  },
-});
-
 // Utiliser le store
 const classroomStore = useClassroomStore();
 
@@ -60,7 +52,7 @@ const handleImageUpload = async (event: Event) => {
     const reader = new FileReader();
     reader.onload = async (e) => {
       const newImage = e.target?.result as string;
-      classroomStore.setImage(newImage); // Stocker l'image dans le store
+      classroomStore.addImage(newImage); // Stocker l'image dans le store
 
       // Attendre que l'image soit rendue dans le DOM
       await nextTick();
@@ -72,12 +64,12 @@ const handleImageUpload = async (event: Event) => {
 
 // Fonction pour supprimer l'image
 const removeImage = () => {
-  classroomStore.setImage(null); // Supprimer l'image dans le store
+  classroomStore.removeImage(); // Supprimer l'image dans le store
 };
 
 // Fonction pour marquer une position
 const markPosition = (event: MouseEvent) => {
-  if (!props.markingMode || !classroomStore.image) return;
+  if (!classroomStore.markingMode || !classroomStore.image) return;
 
   // Obtenir la position du clic relative au canvas
   const canvas = event.currentTarget as HTMLElement;
