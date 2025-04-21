@@ -1,7 +1,21 @@
 <template>
   <div class="classroom-content">
-    WIP
-</div>
+    <h5>Elèves :</h5>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Nom</th>
+          <th>Prénom</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="( student, index ) in classroomStore.students" :key="index">
+          <td>{{ student.surname }}</td>
+          <td>{{ student.name }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </template>
 
 <script setup lang="ts">

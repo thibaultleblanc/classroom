@@ -9,6 +9,14 @@
     </div>
 
     <div class="row g-2">
+
+      <!-- Bouton pour importer un CSV -->
+      <div class="col-12 col-md-6">
+        <button class="btn btn-success w-100" @click="triggerFileInput">
+          Importer une liste d'élèves
+        </button>
+      </div>
+
       <!-- Bouton pour exporter l'image -->
       <div class="col-12 col-md-6">
         <button class="btn btn-secondary w-100" :disabled="disableExportImage" @click="exportImage">
@@ -16,15 +24,57 @@
         </button>
       </div>
     </div>
+
+    <!-- Input pour importer un fichier CSV -->
+    <input type="file" ref="studentList" accept=".csv" class="d-none" @change="handleFileUpload" />
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue';
+import { ref, computed } from 'vue';
 import { useClassroomStore } from '../stores/useClassroomStore';
 
 // Déclarer les événements
 const classroomStore = useClassroomStore();
+
+// Références
+const studentList = ref<HTMLInputElement | null>(null);
+
+// Fonction pour déclencher l'input file
+const triggerFileInput = () => {
+  studentList.value?.click();
+};
+
+// Fonction pour gérer l'importation du fichier CSV
+const handleFileUpload = (event: Event) => {
+  const target = event.target as HTMLInputElement;
+  const file = target.files?.[0];
+  if (file) {
+    const newStudents: { surname: string; name: string }[] = []; // Créer un tableau pour les élèves
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const csvData = e.target?.result as string;
+      const rows = csvData.split('\n').filter((row) => row.trim() !== ''); // Ignorer les lignes vides
+      rows.forEach((row) => {
+        const [surname, name] = row.split(',').map((value) => value.trim());
+        if (surname && name) {
+          newStudents.push({ surname, name });
+        }
+      });
+
+      // Vérifier si le nombre d'élèves dépasse le nombre de marqueurs
+      if (newStudents.length > classroomStore.markers_canvas.length) {
+        alert("Le nombre d'élèves dépasse le nombre de places disponibles !");
+        return;
+      }
+
+      // Ajouter les élèves au store
+      classroomStore.students.splice(0, classroomStore.students.length, ...newStudents);
+      console.log("Liste des élèves importée avec succès :", newStudents);
+    };
+    reader.readAsText(file);
+  }
+};
 
 // Propriétés calculées pour gérer l'état des boutons
 const disableExportImage = computed(() => {

@@ -6,6 +6,7 @@ export const useClassroomStore = defineStore("classroom", () => {
   const state = ref("start");
   const image = ref<string | null>(null);
   const markers_canvas = reactive<{ x: number; y: number }[]>([]);
+  const students = reactive<{ surname: string; name: string }[]>([]); // Liste des élèves
   const xOffset = ref(0);
   const yOffset = ref(0);
   const imageRatio = ref(1);
@@ -26,7 +27,7 @@ export const useClassroomStore = defineStore("classroom", () => {
       removeImage();
       return;
     }
-  };
+      };
 
   const setImageDimensions = (
     newXOffset: number,
@@ -46,6 +47,7 @@ export const useClassroomStore = defineStore("classroom", () => {
   const removeImage = () => {
     image.value = null;
     markers_canvas.splice(0, markers_canvas.length);
+    students.splice(0, students.length); // Réinitialiser les élèves
     xOffset.value = 0;
     yOffset.value = 0;
     imageRatio.value = 1;
@@ -69,11 +71,19 @@ export const useClassroomStore = defineStore("classroom", () => {
     markers_canvas.splice(0, markers_canvas.length);
   };
 
+  const importStudents = (newStudents: { surname: string; name: string }[]) => {
+    if (newStudents.length > markers_canvas.length) {
+      throw new Error("Le nombre d'élèves dépasse le nombre de places disponibles.");
+    }
+    students.splice(0, students.length, ...newStudents); // Remplace la liste des élèves
+  };
+
   return {
     state,
     image,
     markers_canvas,
     markers_ratio,
+    students, // Expose les élèves
     xOffset,
     yOffset,
     imageRatio,
@@ -85,5 +95,6 @@ export const useClassroomStore = defineStore("classroom", () => {
     toggleMarkingMode,
     addMarker,
     clearMarkers,
+    importStudents, // Expose la méthode d'importation des élèves
   };
 });
