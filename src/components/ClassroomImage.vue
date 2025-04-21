@@ -46,9 +46,6 @@ const classroomStore = useClassroomStore();
 // Références et état local
 const fileInput = ref<HTMLInputElement | null>(null);
 const imageElement = ref<HTMLImageElement | null>(null);
-const xOffset = ref(0);
-const yOffset = ref(0);
-const imageRatio = ref(0);
 
 // Fonction pour déclencher l'input file
 const triggerFileInput = () => {
@@ -88,15 +85,8 @@ const markPosition = (event: MouseEvent) => {
   const x = event.clientX - rect.left;
   const y = event.clientY - rect.top;
 
-  // Calculer les marqueurs
-  const canvasMarker = { x, y };
-  const ratioMarker = {
-    x: Math.ceil((x - xOffset.value) * imageRatio.value),
-    y: Math.ceil((y - yOffset.value) * imageRatio.value),
-  };
-
-  // Ajouter les marqueurs au store
-  classroomStore.addMarker(canvasMarker, ratioMarker);
+  // Ajouter le marqueur au store
+  classroomStore.addMarker({ x: Math.ceil(x), y: Math.ceil(y) });
 };
 
 // Fonction pour afficher les détails de l'image
@@ -107,9 +97,12 @@ const setImageDimensions = () => {
   const canvasRect = canvas.getBoundingClientRect();
   const imageRect = imageElement.value.getBoundingClientRect();
 
-  xOffset.value = imageRect.left - canvasRect.left;
-  yOffset.value = imageRect.top - canvasRect.top;
-  imageRatio.value = imageElement.value.naturalWidth / imageRect.width;
+  const newXOffset = imageRect.left - canvasRect.left;
+  const newYOffset = imageRect.top - canvasRect.top;
+  const newImageRatio = imageElement.value.naturalWidth / imageRect.width;
+
+  // Mettre à jour les dimensions dans le store
+  classroomStore.setImageDimensions(newXOffset, newYOffset, newImageRatio);
 };
 </script>
 

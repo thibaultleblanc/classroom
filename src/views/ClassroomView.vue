@@ -20,23 +20,19 @@
 
         <!-- Colonne droite : Panneau de contrôle -->
         <div class="col-md-4">
-          <ClassroomControlPanel :markingMode="markingMode" :disableMarkingMode="!classroomStore.image" @toggle-marking-mode="toggleMarkingMode" @export-image="exportImage" />
+          <ClassroomControlPanel
+            :markingMode="markingMode"
+            :disableMarkingMode="!classroomStore.image"
+            @toggle-marking-mode="toggleMarkingMode"
+            @export-image="exportImage"
+          />
         </div>
       </div>
 
-      <!-- Affichage des données récupérées -->
+      <!-- Affichage des données déplacé dans ClassroomContent -->
       <div class="row mt-4">
         <div class="col">
-          <h5>Image chargée :</h5>
-          <p v-if="classroomStore.image">Une image est chargée.</p>
-          <p v-else>Aucune image chargée.</p>
-
-          <h5>Marqueurs :</h5>
-          <ul>
-            <li v-for="(marker, index) in classroomStore.markers_ratio" :key="index">
-              Position : ({{ marker.x }}, {{ marker.y }})
-            </li>
-          </ul>
+          <ClassroomContent />
         </div>
       </div>
     </div>
@@ -46,6 +42,7 @@
 <script setup lang="ts">
 import ClassroomImage from '../components/ClassroomImage.vue';
 import ClassroomControlPanel from '../components/ClassroomControlPanel.vue';
+import ClassroomContent from '../components/ClassroomContent.vue';
 import { useClassroomStore } from '../stores/useClassroomStore';
 import { ref } from 'vue';
 
@@ -102,7 +99,6 @@ const exportImage = () => {
 </script>
 
 <style scoped>
-/* Ajoutez des styles personnalisés ici si nécessaire */
 .main-content {
   background-color: #f8f9fa;
   /* Couleur de fond claire */
