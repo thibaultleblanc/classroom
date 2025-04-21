@@ -15,13 +15,12 @@
       <div class="row">
         <!-- Colonne gauche : Image -->
         <div class="col-md-8 d-flex justify-content-center align-items-center">
-          <ClassroomImage :markingMode="markingMode" @update-image="updateImage" @update-markers="updateMarkers" />
+          <ClassroomImage :markingMode="markingMode" />
         </div>
 
         <!-- Colonne droite : Panneau de contrôle -->
         <div class="col-md-4">
-          <ControlPanel :markingMode="markingMode" :disableMarkingMode="!image" @toggle-marking-mode="toggleMarkingMode"
-            @export-image="exportImage" />
+          <ControlPanel :markingMode="markingMode" :disableMarkingMode="!classroomStore.image" @toggle-marking-mode="toggleMarkingMode" @export-image="exportImage" />
         </div>
       </div>
 
@@ -29,12 +28,12 @@
       <div class="row mt-4">
         <div class="col">
           <h5>Image chargée :</h5>
-          <p v-if="image">Une image est chargée.</p>
+          <p v-if="classroomStore.image">Une image est chargée.</p>
           <p v-else>Aucune image chargée.</p>
 
           <h5>Marqueurs :</h5>
           <ul>
-            <li v-for="(marker, index) in markers" :key="index">
+            <li v-for="(marker, index) in classroomStore.markers_ratio" :key="index">
               Position : ({{ marker.x }}, {{ marker.y }})
             </li>
           </ul>
@@ -47,28 +46,21 @@
 <script setup lang="ts">
 import ClassroomImage from '../components/ClassroomImage.vue';
 import ControlPanel from '../components/ControlPanel.vue';
-import { ref, reactive } from 'vue';
+import { useClassroomStore } from '../stores/useClassroomStore';
+import { ref } from 'vue';
 
+// Utiliser le store Pinia
+const classroomStore = useClassroomStore();
 const markingMode = ref(false);
-const image = ref<string | null>(null);
-const markers = reactive<{ x: number; y: number }[]>([]);
 
+// Fonction pour basculer le mode marquage
 const toggleMarkingMode = () => {
   markingMode.value = !markingMode.value;
 };
 
-// Gestionnaires pour les événements
-const updateImage = (newImage: string | null) => {
-  image.value = newImage;
-};
-
-const updateMarkers = (newMarkers: { x: number; y: number }[]) => {
-  markers.splice(0, markers.length, ...newMarkers);
-};
-
 // Fonction pour exporter l'image avec les marqueurs
 const exportImage = () => {
-  if (!image.value) {
+  if (!classroomStore.image) {
     console.error("Aucune image à exporter.");
     return;
   }
@@ -82,7 +74,7 @@ const exportImage = () => {
   }
 
   const img = new Image();
-  img.src = image.value;
+  img.src = classroomStore.image;
 
   img.onload = () => {
     // Configurer la taille du canvas
@@ -93,7 +85,7 @@ const exportImage = () => {
     ctx.drawImage(img, 0, 0);
 
     // Dessiner les marqueurs
-    markers.forEach((marker) => {
+    classroomStore.markers_ratio.forEach((marker) => {
       ctx.fillStyle = 'red';
       ctx.beginPath();
       ctx.arc(marker.x, marker.y, 10, 0, Math.PI * 2);

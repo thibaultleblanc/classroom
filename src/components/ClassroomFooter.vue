@@ -16,7 +16,7 @@
         <font-awesome-icon :icon="['fab', 'linkedin']" class="icon" />
       </a>
     </div>
-    <div class="text-center p-2">© 2024 Thibault Leblanc</div>
+    <div class="text-center p-2">© 2025 Thibault Leblanc</div>
   </footer>
 </template>
 
