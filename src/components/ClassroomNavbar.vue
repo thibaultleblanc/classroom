@@ -9,7 +9,7 @@
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ms-auto">
           <li class="nav-item">
-            <a class="nav-link" href="#">À propos</a>
+            <a class="nav-link" href="/about">À propos</a>
           </li>
         </ul>
       </div>

@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import ClassroomNavbar from './components/ClassroomNavbar.vue'
-import MainContent from './components/MainContent.vue'
 </script>
 
 <template>
@@ -13,7 +12,7 @@ import MainContent from './components/MainContent.vue'
     <!-- Partie centrale -->
     <main class="flex-grow-1 py-4">
       <div class="container flex-grow-1">
-        <MainContent />
+        <router-view />
       </div>
     </main>
 

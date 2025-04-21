@@ -45,8 +45,8 @@
 </template>
 
 <script setup lang="ts">
-import ClassroomImage from './ClassroomImage.vue';
-import ControlPanel from './ControlPanel.vue';
+import ClassroomImage from '../components/ClassroomImage.vue';
+import ControlPanel from '../components/ControlPanel.vue';
 import { ref, reactive } from 'vue';
 
 const markingMode = ref(false);
