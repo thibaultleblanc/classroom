@@ -20,7 +20,7 @@
 
         <!-- Colonne droite : Panneau de contrôle -->
         <div class="col-md-4">
-          <ControlPanel :markingMode="markingMode" :disableMarkingMode="!classroomStore.image" @toggle-marking-mode="toggleMarkingMode" @export-image="exportImage" />
+          <ClassroomControlPanel :markingMode="markingMode" :disableMarkingMode="!classroomStore.image" @toggle-marking-mode="toggleMarkingMode" @export-image="exportImage" />
         </div>
       </div>
 
@@ -45,7 +45,7 @@
 
 <script setup lang="ts">
 import ClassroomImage from '../components/ClassroomImage.vue';
-import ControlPanel from '../components/ControlPanel.vue';
+import ClassroomControlPanel from '../components/ClassroomControlPanel.vue';
 import { useClassroomStore } from '../stores/useClassroomStore';
 import { ref } from 'vue';
 

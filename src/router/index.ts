@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import MainContent from '../views/MainContent.vue'
+import ClassroomView from '../views/ClassroomView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -7,7 +7,7 @@ const router = createRouter({
     {
       path: '/',
       name: 'home',
-      component: MainContent,
+      component: ClassroomView,
     },
     {
       path: '/about',
