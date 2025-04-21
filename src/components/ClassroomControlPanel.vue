@@ -105,7 +105,7 @@ const handleFileUpload = (event: Event) => {
   const target = event.target as HTMLInputElement;
   const file = target.files?.[0];
   if (file) {
-    const newMarkers = []; // Créer un nouveau tableau pour les marqueurs
+    const newMarkers: { x: number; y: number }[] = []; // Créer un nouveau tableau pour les marqueurs
     const reader = new FileReader();
     reader.onload = (e) => {
       const csvData = e.target?.result as string;
@@ -119,7 +119,7 @@ const handleFileUpload = (event: Event) => {
           });
         }
       });
-      classroomStore.markers_canvas = newMarkers; // Assigner un nouveau tableau pour forcer la réactivité
+      classroomStore.markers_canvas.splice(0, classroomStore.markers_canvas.length, ...newMarkers);
     };
     reader.readAsText(file);
   }
