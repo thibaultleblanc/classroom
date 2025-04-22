@@ -53,7 +53,6 @@ const updateMarker = (index: number, key: 'x' | 'y', value: number) => {
 
 // Fonction pour supprimer un marqueur
 const removeMarker = (index: number) => {
-  classroomStore.markers_ratio.splice(index, 1);
   classroomStore.markers_canvas.splice(index, 1); // Supprimer également du canvas
 };
 </script>

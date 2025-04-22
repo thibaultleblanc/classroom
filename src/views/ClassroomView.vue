@@ -50,7 +50,7 @@ const beforePositionValidated = computed(() => {
 });
 
 const afterPositionValidated = computed(() => {
-  return classroomStore.state === 'positionsValidated';
+  return classroomStore.state === 'positionsValidated' || classroomStore.state === 'studentsAssigned';
 });
 </script>
 

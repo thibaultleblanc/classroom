@@ -9,18 +9,31 @@
       </button>
 
       <!-- Image chargée -->
-      <img v-if="classroomStore.image" :src="classroomStore.image" alt="Image chargée" class="img-fluid" ref="imageElement" />
+      <img v-if="classroomStore.image" :src="classroomStore.image" alt="Image chargée" class="img-fluid"
+        ref="imageElement" />
 
       <!-- Croix pour supprimer l'image (visible si une image est chargée) -->
-      <button v-if="classroomStore.image" class="btn btn-danger btn-sm position-absolute top-0 end-0 m-2" @click="removeImage">
+      <button v-if="classroomStore.image" class="btn btn-danger btn-sm position-absolute top-0 end-0 m-2"
+        @click="removeImage">
         &times;
       </button>
 
       <!-- Marqueurs (croix rouges) -->
-      <div v-for="(marker, index) in classroomStore.markers_canvas" :key="index" class="marker"
-        :style="{ top: marker.y + 'px', left: marker.x + 'px' }">
-        &times;
-      </div>
+      <template v-if="classroomStore.state === 'studentsAssigned'">
+        <div v-for="(item, index) in classroomStore.classroom" :key="index" class="marker"
+          :style="{ top: item.desk.y + 'px', left: item.desk.x + 'px' }">
+          <div class="student-info">
+            <span class="student-surname">{{ item.student?.surname || '' }}</span>
+            <span class="student-name">{{ item.student?.name || '' }}</span>
+          </div>
+        </div>
+      </template>
+      <template v-else>
+        <div v-for="(marker, index) in classroomStore.markers_canvas" :key="index" class="marker"
+          :style="{ top: marker.y + 'px', left: marker.x + 'px' }">
+          &times;
+        </div>
+      </template>
     </div>
 
     <!-- Input caché pour uploader une image -->
@@ -123,6 +136,26 @@ const setImageDimensions = () => {
   color: red;
   font-size: 24px;
   transform: translate(-50%, -50%);
+}
+
+.student-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: blue;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.student-surname {
+  font-size: 6px;
+  font-weight: bold;
+}
+
+.student-name {
+  font-size: 4px;
+  font-weight: normal;
 }
 
 button.position-absolute {

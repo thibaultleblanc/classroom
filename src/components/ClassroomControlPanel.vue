@@ -59,7 +59,7 @@ const classroomStore = useClassroomStore();
 const studentList = ref<HTMLInputElement | null>(null);
 
 // État local pour le mode de distribution
-const selectedDistribution = ref('random');
+const selectedDistribution = ref<'random' | 'alphabetical'>('random');
 
 // Description du mode de distribution
 const distributionDescription = computed(() => {
@@ -77,7 +77,7 @@ const disablePlaceStudents = computed(() => {
 });
 
 const disableExportImage = computed(() => {
-  return classroomStore.state !== 'end'; // Actif uniquement si l'état global est "end"
+  return classroomStore.state !== 'studentsAssigned';
 });
 
 // Fonction pour déclencher l'input file
@@ -116,6 +116,11 @@ const handleFileUpload = (event: Event) => {
   }
 };
 
+// Fonction pour placer les élèves
+const placeStudents = () => {
+  classroomStore.assignStudentsToDesks(selectedDistribution.value); // Appeler la méthode avec la valeur sélectionnée
+  console.log(`Les élèves ont été placés en mode : ${selectedDistribution.value}`);
+};
 
 // Fonction pour exporter l'image
 const exportImage = () => {
@@ -143,17 +148,26 @@ const exportImage = () => {
     // Dessiner l'image de base
     ctx.drawImage(img, 0, 0);
 
-    // Dessiner les marqueurs
-    classroomStore.markers_ratio.forEach((marker) => {
-      ctx.fillStyle = 'red';
-      ctx.beginPath();
-      ctx.arc(marker.x, marker.y, 10, 0, Math.PI * 2);
-      ctx.fill();
+    // Dessiner les noms et prénoms des élèves
+    classroomStore.classroom.forEach((item) => {
+      if (item.student) {
+        const { x, y } = item.deskResized;
+        const { surname, name } = item.student;
+
+        // Configurer le style du texte
+        ctx.fillStyle = '#00008B'; // Bleu foncé
+        ctx.textAlign = 'center';
+        ctx.font = 'bold 16px Arial'; // Nom de famille en gras
+        ctx.fillText(surname, x, y - 10); // Nom de famille (au-dessus)
+
+        ctx.font = 'normal 14px Arial'; // Prénom en normal
+        ctx.fillText(name, x, y + 10); // Prénom (en dessous)
+      }
     });
 
     // Exporter l'image
     const link = document.createElement('a');
-    link.download = 'image-avec-marqueurs.png';
+    link.download = 'image-avec-eleves.png';
     link.href = canvas.toDataURL('image/png');
     link.click();
   };
