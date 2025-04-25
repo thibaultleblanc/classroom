@@ -114,6 +114,9 @@ const handleFileUpload = (event: Event) => {
     };
     reader.readAsText(file);
   }
+
+  // Réinitialiser la valeur de l'input pour permettre de réimporter le même fichier
+  target.value = '';
 };
 
 // Fonction pour placer les élèves
