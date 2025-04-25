@@ -1,14 +1,14 @@
 <template>
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container">
-      <a class="navbar-brand" href="/">
+      <router-link class="navbar-brand" to="/">
         <!-- Superposition des icônes -->
         <span class="fa-stack fa-lg">
           <font-awesome-icon :icon="['fas', 'square']" class="fa-stack-2x text-warning" />
           <font-awesome-icon :icon="['fas', 'school']" class="fa-stack-1x text-dark" />
         </span>
         Classroom
-      </a>
+      </router-link>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
         aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -16,7 +16,7 @@
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ms-auto">
           <li class="nav-item">
-            <a class="nav-link" href="/about">À propos</a>
+            <router-link class="nav-link" to="/about">À propos</router-link>
           </li>
         </ul>
       </div>
