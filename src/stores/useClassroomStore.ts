@@ -20,6 +20,8 @@ export const useClassroomStore = defineStore("classroom", () => {
   const yMax = ref(0);
   const imageRatio = ref(1);
   const markingMode = ref(false);
+  const fontSize = ref(16); // Taille de la police par défaut
+  const fontColor = ref("#000000"); // Couleur par défaut (noir)
 
   // Actions
   const addImage = (newImage: string) => {
@@ -110,6 +112,15 @@ export const useClassroomStore = defineStore("classroom", () => {
     });
   };
 
+  // Actions pour mettre à jour la taille de la police et la couleur
+  const setFontSize = (size: number) => {
+    fontSize.value = size;
+  };
+
+  const setFontColor = (color: string) => {
+    fontColor.value = color;
+  };
+
   return {
     state,
     image,
@@ -123,6 +134,8 @@ export const useClassroomStore = defineStore("classroom", () => {
     yMax,
     imageRatio,
     markingMode,
+    fontSize,
+    fontColor,
     addImage,
     setImageDimensions,
     removeImage,
@@ -133,5 +146,7 @@ export const useClassroomStore = defineStore("classroom", () => {
     importStudents,
     assignStudentsToDesks, // Expose la méthode d'association
     updateMarkersOnResize, // Expose la nouvelle fonction
+    setFontSize,
+    setFontColor,
   };
 });

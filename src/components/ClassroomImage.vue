@@ -18,13 +18,28 @@
         &times;
       </button>
 
-      <!-- Marqueurs (croix rouges) -->
+      <!-- Marqueurs (croix rouges ou informations des élèves) -->
       <template v-if="classroomStore.state === 'studentsAssigned'">
         <div v-for="(item, index) in classroomStore.classroom" :key="index" class="marker"
-          :style="{ top: item.desk.y + classroomStore.yOffset + 'px', left: item.desk.x + classroomStore.xOffset + 'px' }">
+          :style="{
+            top: item.desk.y + classroomStore.yOffset + 'px',
+            left: item.desk.x + classroomStore.xOffset + 'px',
+          }">
           <div class="student-info">
-            <span class="student-surname">{{ item.student?.surname || '' }}</span>
-            <span class="student-name">{{ item.student?.name || '' }}</span>
+            <span class="student-surname"
+              :style="{
+                fontSize: classroomStore.fontSize / classroomStore.imageRatio + 'px',
+                color: classroomStore.fontColor,
+              }">
+              {{ item.student?.surname || '' }}
+            </span>
+            <span class="student-name"
+              :style="{
+                fontSize: ( (classroomStore.fontSize  - 2) / classroomStore.imageRatio) * 0.8 + 'px',
+                color: classroomStore.fontColor,
+              }">
+              {{ item.student?.name || '' }}
+            </span>
           </div>
         </div>
       </template>
@@ -174,12 +189,10 @@ onBeforeUnmount(() => {
 }
 
 .student-surname {
-  font-size: 6px;
   font-weight: bold;
 }
 
 .student-name {
-  font-size: 4px;
   font-weight: normal;
 }
 

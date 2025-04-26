@@ -34,7 +34,21 @@
       </div>
     </div>
 
-    <!-- Ligne 3 : Exporter l'image -->
+    <!-- Ligne 3 : Taille de la police et couleur -->
+    <div class="row mb-4 align-items-center">
+      <div class="col-md-6">
+        <label for="fontSize" class="form-label">Taille de la police :</label>
+        <select id="fontSize" class="form-select" v-model="fontSize">
+          <option v-for="size in fontSizes" :key="size" :value="size">{{ size }}px</option>
+        </select>
+      </div>
+      <div class="col-md-6">
+        <label for="fontColor" class="form-label">Couleur du texte :</label>
+        <input id="fontColor" type="color" class="form-control form-control-color" v-model="fontColor" />
+      </div>
+    </div>
+
+    <!-- Ligne 4 : Exporter l'image -->
     <div class="row">
       <div class="col-12">
         <button class="btn btn-secondary w-100" :disabled="disableExportImage" @click="exportImage">
@@ -60,6 +74,20 @@ const studentList = ref<HTMLInputElement | null>(null);
 
 // État local pour le mode de distribution
 const selectedDistribution = ref<'random' | 'alphabetical'>('random');
+
+// Propriétés calculées pour la taille de la police et la couleur
+const fontSize = computed({
+  get: () => classroomStore.fontSize,
+  set: (value) => classroomStore.setFontSize(value),
+});
+
+const fontColor = computed({
+  get: () => classroomStore.fontColor,
+  set: (value) => classroomStore.setFontColor(value),
+});
+
+// Générer les tailles de police de 12px à 50px, avec un pas de 2
+const fontSizes = Array.from({ length: 20 }, (_, i) => 12 + i * 2); // [12, 14, 16, ..., 50]
 
 // Description du mode de distribution
 const distributionDescription = computed(() => {
@@ -158,12 +186,12 @@ const exportImage = () => {
         const { surname, name } = item.student;
 
         // Configurer le style du texte
-        ctx.fillStyle = '#00008B'; // Bleu foncé
+        ctx.fillStyle = fontColor.value; // Utiliser la couleur sélectionnée
         ctx.textAlign = 'center';
-        ctx.font = 'bold 16px Arial'; // Nom de famille en gras
+        ctx.font = `bold ${fontSize.value}px Arial`; // Utiliser la taille de police sélectionnée
         ctx.fillText(surname, x, y - 10); // Nom de famille (au-dessus)
 
-        ctx.font = 'normal 14px Arial'; // Prénom en normal
+        ctx.font = `normal ${fontSize.value - 2}px Arial`; // Prénom avec une taille légèrement plus petite
         ctx.fillText(name, x, y + 10); // Prénom (en dessous)
       }
     });

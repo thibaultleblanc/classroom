@@ -4,8 +4,8 @@
 
 - Marqueurs draggables
 - Eleves echangeables draggables
-- bouton taille de la police
 
+- Il faut faire en sorte de savoir où se trouve le tableau
 - Voir pour ranger les marqueurs dans l'ordre
 - Voir pour ajouter des modes de tris lunettes
 - Voir pour ajouter des élèves
