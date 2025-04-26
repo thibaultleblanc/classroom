@@ -1,9 +1,9 @@
 # TODO
 
-- BUG : Si on redimensionne la fenêtre en cours de route les croix ne sont plus au bon endroit...
+## TODOLIST
+
 - Marqueurs draggables
 - Eleves echangeables draggables
-- Ajouter un toast en bas de l'écran pour afficher les messages d'erreurs ?
 - bouton taille de la police
 
 - Voir pour ranger les marqueurs dans l'ordre
@@ -16,3 +16,9 @@
 - Maj le readme
 
 - Voir si la couleur du logo n'est pas de trop ?
+- Ajouter un toast en bas de l'écran pour afficher les messages d'erreurs ?
+
+
+## Known issues
+
+- Le resize de l'écran fait bouger les marqueurs à cause des "ceil"
