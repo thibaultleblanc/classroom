@@ -13,7 +13,7 @@ export const useClassroomStore = defineStore("classroom", () => {
     }));
   }); // Liste des marqueurs sur l'image
   const students = reactive<{ surname: string; name: string }[]>([]); // Liste des élèves
-  const classroom = reactive<{ desk: { x: number; y: number }; deskResized: {x: number; y:number}; student: { name: string; surname: string } | null }[]>([]); // Liste des bureaux et élèves
+  const classroom = reactive<{ desk: { x: number; y: number }; deskResized: { x: number; y: number }; student: { name: string; surname: string } | null }[]>([]); // Liste des bureaux et élèves
   const xOffset = ref(0);
   const yOffset = ref(0);
   const xMax = ref(0);
@@ -35,7 +35,6 @@ export const useClassroomStore = defineStore("classroom", () => {
     yOffset.value = newYOffset;
     xMax.value = newXOffset + canvaImgWidth;
     yMax.value = newYOffset + canvaImgHeight;
-    yOffset.value = newYOffset;
     imageRatio.value = newImageRatio;
     state.value = "imageLoaded";
   };
@@ -103,6 +102,14 @@ export const useClassroomStore = defineStore("classroom", () => {
     state.value = "studentsAssigned";
   };
 
+  // Nouvelle fonction : Mettre à jour les marqueurs lors du redimensionnement
+  const updateMarkersOnResize = (oldRatio: number, newRatio: number) => {
+    markersCanvas.forEach(marker => {
+      marker.x = Math.round(marker.x * (oldRatio / newRatio));
+      marker.y = Math.round(marker.y * (oldRatio / newRatio));
+    });
+  };
+
   return {
     state,
     image,
@@ -125,5 +132,6 @@ export const useClassroomStore = defineStore("classroom", () => {
     clearMarkers,
     importStudents,
     assignStudentsToDesks, // Expose la méthode d'association
+    updateMarkersOnResize, // Expose la nouvelle fonction
   };
 });

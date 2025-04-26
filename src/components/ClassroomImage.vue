@@ -42,7 +42,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, nextTick } from 'vue';
+import { ref, nextTick, onMounted, onBeforeUnmount } from 'vue';
 import { useClassroomStore } from '../stores/useClassroomStore';
 
 // Utiliser le store
@@ -115,6 +115,25 @@ const setImageDimensions = () => {
   classroomStore.setImageDimensions(newXOffset, newYOffset, imageRect.width,
     imageRect.height, newImageRatio);
 };
+
+// Fonction pour recalculer les positions des marqueurs lors du redimensionnement
+const handleResize = () => {
+  if (classroomStore.image) {
+    const oldRatio = classroomStore.imageRatio;
+    setImageDimensions();
+    const newRatio = classroomStore.imageRatio;
+    classroomStore.updateMarkersOnResize(oldRatio, newRatio);
+  }
+};
+
+// Ajouter et retirer l'écouteur de redimensionnement
+onMounted(() => {
+  window.addEventListener('resize', handleResize);
+});
+
+onBeforeUnmount(() => {
+  window.removeEventListener('resize', handleResize);
+});
 </script>
 
 <style scoped>
