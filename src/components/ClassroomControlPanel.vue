@@ -73,7 +73,7 @@ const distributionDescription = computed(() => {
 
 // Propriétés calculées pour gérer l'état des boutons
 const disablePlaceStudents = computed(() => {
-  return classroomStore.students.length === 0 || classroomStore.markers_canvas.length === 0;
+  return classroomStore.students.length === 0 || classroomStore.markersCanvas.length === 0;
 });
 
 const disableExportImage = computed(() => {
@@ -103,7 +103,7 @@ const handleFileUpload = (event: Event) => {
       });
 
       // Vérifier si le nombre d'élèves dépasse le nombre de marqueurs
-      if (newStudents.length > classroomStore.markers_canvas.length) {
+      if (newStudents.length > classroomStore.markersCanvas.length) {
         alert("Le nombre d'élèves dépasse le nombre de places disponibles !");
         return;
       }

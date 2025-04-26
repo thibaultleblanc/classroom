@@ -1,15 +1,23 @@
 import { defineStore } from "pinia";
-import { ref, reactive } from "vue";
+import { ref, reactive, computed } from "vue";
 
 export const useClassroomStore = defineStore("classroom", () => {
   // État
   const state = ref("start");
   const image = ref<string | null>(null);
-  const markers_canvas = reactive<{ x: number; y: number }[]>([]);
+  const markersCanvas = reactive<{ x: number; y: number }[]>([]);
+  const markersRatioImage = computed(() => {
+    return markersCanvas.map(marker => ({
+      x: Math.ceil(marker.x * imageRatio.value),
+      y: Math.ceil(marker.y * imageRatio.value),
+    }));
+  }); // Liste des marqueurs sur l'image
   const students = reactive<{ surname: string; name: string }[]>([]); // Liste des élèves
   const classroom = reactive<{ desk: { x: number; y: number }; deskResized: {x: number; y:number}; student: { name: string; surname: string } | null }[]>([]); // Liste des bureaux et élèves
   const xOffset = ref(0);
   const yOffset = ref(0);
+  const xMax = ref(0);
+  const yMax = ref(0);
   const imageRatio = ref(1);
   const markingMode = ref(false);
 
@@ -22,24 +30,25 @@ export const useClassroomStore = defineStore("classroom", () => {
     }
   };
 
-  const setImageDimensions = (newXOffset: number, newYOffset: number, newImageRatio: number) => {
+  const setImageDimensions = (newXOffset: number, newYOffset: number, canvaImgWidth: number, canvaImgHeight: number, newImageRatio: number) => {
     xOffset.value = newXOffset;
     yOffset.value = newYOffset;
+    xMax.value = newXOffset + canvaImgWidth;
+    yMax.value = newYOffset + canvaImgHeight;
+    yOffset.value = newYOffset;
     imageRatio.value = newImageRatio;
-    if (!image.value) {
-      removeImage();
-      return;
-    }
     state.value = "imageLoaded";
   };
 
   const removeImage = () => {
     image.value = null;
-    markers_canvas.splice(0, markers_canvas.length);
+    markersCanvas.splice(0, markersCanvas.length);
     students.splice(0, students.length);
     classroom.splice(0, classroom.length); // Réinitialiser la liste des bureaux et élèves
     xOffset.value = 0;
     yOffset.value = 0;
+    xMax.value = 0;
+    yMax.value = 0;
     imageRatio.value = 1;
     state.value = "start";
   };
@@ -54,15 +63,15 @@ export const useClassroomStore = defineStore("classroom", () => {
   };
 
   const addMarker = (canvasMarker: { x: number; y: number }) => {
-    markers_canvas.push(canvasMarker);
+    markersCanvas.push(canvasMarker);
   };
 
   const clearMarkers = () => {
-    markers_canvas.splice(0, markers_canvas.length);
+    markersCanvas.splice(0, markersCanvas.length);
   };
 
   const importStudents = (newStudents: { surname: string; name: string }[]) => {
-    if (newStudents.length > markers_canvas.length) {
+    if (newStudents.length > markersCanvas.length) {
       throw new Error("Le nombre d'élèves dépasse le nombre de places disponibles.");
     }
     students.splice(0, students.length, ...newStudents);
@@ -79,13 +88,13 @@ export const useClassroomStore = defineStore("classroom", () => {
       sortedStudents = sortedStudents.sort(() => Math.random() - 0.5);
     }
 
-    markers_canvas.forEach((marker, index) => {
+    markersCanvas.forEach((marker, index) => {
       const student = sortedStudents[index] || null; // Associer un élève ou laisser null si pas assez d'élèves
       classroom.push({
         desk: { x: marker.x, y: marker.y },
         deskResized: {
-          x: Math.ceil((marker.x - xOffset.value) * imageRatio.value),
-          y: Math.ceil((marker.y - yOffset.value) * imageRatio.value),
+          x: Math.ceil(marker.x * imageRatio.value),
+          y: Math.ceil(marker.y * imageRatio.value),
         },
         student: student,
       });
@@ -97,11 +106,14 @@ export const useClassroomStore = defineStore("classroom", () => {
   return {
     state,
     image,
-    markers_canvas,
+    markersCanvas,
+    markersRatioImage,
     students,
     classroom, // Expose la liste des bureaux et élèves
     xOffset,
     yOffset,
+    xMax,
+    yMax,
     imageRatio,
     markingMode,
     addImage,

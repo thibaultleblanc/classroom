@@ -1,13 +1,18 @@
 # TODO
 
-- BUG : L'ajout des marqueurs doit être possible uniquement si le marqueur est sur l'image
-- BUG : quand on insère 2 fois le même fichier ca coince
+- BUG : Si on redimensionne la fenêtre en cours de route les croix ne sont plus au bon endroit...
+- Marqueurs draggables
+- Eleves echangeables draggables
+- Ajouter un toast en bas de l'écran pour afficher les messages d'erreurs ?
 - bouton taille de la police
-- proposer le nom de l'image
-- Permettre de télécharger le CSV des positions (ou ouvrir une modale sur le passage à la suite)
-- Vérifier que l'export fonctionne
 
-- Deployer sur github pages
+- Voir pour ranger les marqueurs dans l'ordre
+- Voir pour ajouter des modes de tris lunettes
+- Voir pour ajouter des élèves
+
+
+- Gérer déploiement sur branche gh pages
+- Gérer l'auto update sur github pages
 - Maj le readme
 
 - Voir si la couleur du logo n'est pas de trop ?

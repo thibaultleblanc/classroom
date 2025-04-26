@@ -8,6 +8,7 @@ import router from './router'
 import FontAwesomeIcon from './fontawasome'
 
 import 'bootstrap/dist/css/bootstrap.min.css'
+import 'bootstrap';
 
 const app = createApp(App)
 

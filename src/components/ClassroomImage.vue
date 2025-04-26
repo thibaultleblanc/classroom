@@ -21,7 +21,7 @@
       <!-- Marqueurs (croix rouges) -->
       <template v-if="classroomStore.state === 'studentsAssigned'">
         <div v-for="(item, index) in classroomStore.classroom" :key="index" class="marker"
-          :style="{ top: item.desk.y + 'px', left: item.desk.x + 'px' }">
+          :style="{ top: item.desk.y + classroomStore.yOffset + 'px', left: item.desk.x + classroomStore.xOffset + 'px' }">
           <div class="student-info">
             <span class="student-surname">{{ item.student?.surname || '' }}</span>
             <span class="student-name">{{ item.student?.name || '' }}</span>
@@ -29,8 +29,8 @@
         </div>
       </template>
       <template v-else>
-        <div v-for="(marker, index) in classroomStore.markers_canvas" :key="index" class="marker"
-          :style="{ top: marker.y + 'px', left: marker.x + 'px' }">
+        <div v-for="(marker, index) in classroomStore.markersCanvas" :key="index" class="marker"
+          :style="{ top: marker.y + classroomStore.yOffset + 'px', left: marker.x + classroomStore.xOffset + 'px' }">
           &times;
         </div>
       </template>
@@ -93,8 +93,10 @@ const markPosition = (event: MouseEvent) => {
   const x = event.clientX - rect.left;
   const y = event.clientY - rect.top;
 
+  if (x < classroomStore.xOffset || y < classroomStore.yOffset || x > classroomStore.xMax || y > classroomStore.yMax) return;
+
   // Ajouter le marqueur au store
-  classroomStore.addMarker({ x: Math.ceil(x), y: Math.ceil(y) });
+  classroomStore.addMarker({ x: Math.ceil(x - classroomStore.xOffset), y: Math.ceil(y - classroomStore.yOffset) });
 };
 
 // Fonction pour afficher les détails de l'image
@@ -110,7 +112,8 @@ const setImageDimensions = () => {
   const newImageRatio = imageElement.value.naturalWidth / imageRect.width;
 
   // Mettre à jour les dimensions dans le store
-  classroomStore.setImageDimensions(newXOffset, newYOffset, newImageRatio);
+  classroomStore.setImageDimensions(newXOffset, newYOffset, imageRect.width,
+    imageRect.height, newImageRatio);
 };
 </script>
 
