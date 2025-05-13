@@ -7,7 +7,7 @@ import vueDevTools from 'vite-plugin-vue-devtools'
 
 // https://vite.dev/config/
 export default defineConfig({
-  base: '/classroom/',
+  base: '/classroom',
   plugins: [vue(), vueJsx(), vueDevTools()],
   server: {
     host: true,
